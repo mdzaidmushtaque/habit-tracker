@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura - Premium Habit Tracker</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <span class="brand-name">Aura</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-page="dashboard" id="btn-nav-dashboard" aria-label="Dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="9" rx="1"/>
+                        <rect x="14" y="3" width="7" height="5" rx="1"/>
+                        <rect x="14" y="12" width="7" height="9" rx="1"/>
+                        <rect x="3" y="16" width="7" height="5" rx="1"/>
+                    </svg>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-page="habits" id="btn-nav-habits" aria-label="Habits">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                    <span>Habits</span>
+                </button>
+                <button class="nav-item" data-page="calendar" id="btn-nav-calendar" aria-label="Calendar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    <span>Calendar</span>
+                </button>
+                <button class="nav-item" data-page="reports" id="btn-nav-reports" aria-label="Reports">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    <span>Reports</span>
+                </button>
+                <button class="nav-item" data-page="settings" id="btn-nav-settings" aria-label="Settings">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar" id="avatar-preview">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Aura Master</span>
+                        <span class="user-status">Consistency is Key</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Bottom Navigation (Mobile Only) -->
+        <nav class="bottom-nav">
+            <button class="bottom-nav-item active" data-page="dashboard" aria-label="Dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="9" rx="1"/>
+                    <rect x="14" y="3" width="7" height="5" rx="1"/>
+                    <rect x="14" y="12" width="7" height="9" rx="1"/>
+                    <rect x="3" y="16" width="7" height="5" rx="1"/>
+                </svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="bottom-nav-item" data-page="habits" aria-label="Habits">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"/>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                </svg>
+                <span>Habits</span>
+            </button>
+            <button class="bottom-nav-item" data-page="calendar" aria-label="Calendar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span>Calendar</span>
+            </button>
+            <button class="bottom-nav-item" data-page="reports" aria-label="Reports">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/>
+                    <line x1="12" y1="20" x2="12" y2="4"/>
+                    <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <span>Reports</span>
+            </button>
+            <button class="bottom-nav-item" data-page="settings" aria-label="Settings">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+                <span>Settings</span>
+            </button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Global Header -->
+            <header class="global-header">
+                <div class="header-left">
+                    <h1 class="header-title" id="page-title">Dashboard</h1>
+                    <p class="header-subtitle" id="page-subtitle">Welcome back! Keep growing.</p>
+                </div>
+                <div class="header-right">
+                    <!-- Live Clock and Date -->
+                    <div class="clock-widget">
+                        <span class="live-date" id="live-date">July 31, 2026</span>
+                        <span class="live-time" id="live-time">20:57</span>
+                    </div>
+                    <!-- Quick Add Button -->
+                    <button class="btn btn-primary" id="btn-quick-add" aria-label="Add New Habit">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Add Habit</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page 1: Dashboard -->
+            <section class="page active" id="page-dashboard">
+                <!-- Today Stats Grid -->
+                <div class="dashboard-stats-grid">
+                    <!-- Circular Completion Card -->
+                    <div class="stat-card glass-card card-glow-primary">
+                        <div class="card-title-row">
+                            <h3>Today's Completion</h3>
+                            <span class="badge badge-accent" id="completion-percentage-badge">0%</span>
+                        </div>
+                        <div class="circular-progress-wrapper">
+                            <svg viewBox="0 0 100 100" class="circular-svg">
+                                <circle cx="50" cy="50" r="40" class="circular-bg"></circle>
+                                <circle cx="50" cy="50" r="40" class="circular-fill" id="dashboard-circular-fill" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                            </svg>
+                            <div class="circular-text">
+                                <span class="progress-percent" id="dashboard-completion-txt">0%</span>
+                                <span class="progress-label" id="dashboard-completion-fraction">0 / 0 Done</span>
+                            </div>
+                        </div>
+                        <!-- Linear Details -->
+                        <div class="metric-row">
+                            <div class="metric-item">
+                                <span class="metric-val" id="count-completed">0</span>
+                                <span class="metric-lbl">Completed</span>
+                            </div>
+                            <div class="metric-item border-left">
+                                <span class="metric-val" id="count-pending">0</span>
+                                <span class="metric-lbl">Pending</span>
+                            </div>
+                            <div class="metric-item border-left">
+                                <span class="metric-val" id="count-remaining">0</span>
+                                <span class="metric-lbl">Remaining</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Streak Card -->
+                    <div class="stat-card glass-card card-glow-warning">
+                        <div class="card-title-row">
+                            <h3>Streak Monitor</h3>
+                            <span class="badge badge-warning">Active</span>
+                        </div>
+                        <div class="streak-wrapper">
+                            <div class="streak-huge-row">
+                                <div class="streak-big-val">
+                                    <span id="streak-current-val">0</span>
+                                    <span class="streak-unit">days</span>
+                                </div>
+                                <div class="fire-icon-wrapper animate-pulse">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="streak-meta-grid">
+                                <div class="streak-meta-item">
+                                    <span class="streak-meta-lbl">Longest Streak</span>
+                                    <span class="streak-meta-val" id="streak-longest-val">0 days</span>
+                                </div>
+                                <div class="streak-meta-item">
+                                    <span class="streak-meta-lbl">Perfect Days</span>
+                                    <span class="streak-meta-val" id="streak-perfect-count">0 days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Motivational Quote Card -->
+                    <div class="stat-card glass-card flex-center quote-card">
+                        <div class="quote-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.189 2v3.433c-3.15.345-4.511 2.787-4.112 5.717.399 2.93 2.118 3.861 3.585 3.12 1.467-.741 2.002-2.907.799-4.381-1.202-1.474-3.528-.487-3.927.766-.339-2.907.721-5.123 3.655-5.36V2H11.19zm8.811 0v3.433c-3.15.345-4.511 2.787-4.112 5.717.399 2.93 2.118 3.861 3.585 3.12 1.467-.741 2.002-2.907.799-4.381-1.202-1.474-3.528-.487-3.927.766-.339-2.907.721-5.123 3.655-5.36V2H20z"/>
+                            </svg>
+                        </div>
+                        <blockquote class="quote-text" id="quote-display">
+                            "Your habits decide your future. Master the small details."
+                        </blockquote>
+                        <cite class="quote-author" id="quote-author">- Atomic Rules</cite>
+                    </div>
+                </div>
+
+                <!-- Today Habits List Control Board -->
+                <div class="board-header">
+                    <h2 class="section-title">Today's Actions</h2>
+                    <div class="board-controls">
+                        <!-- Sorting controls -->
+                        <div class="select-wrapper">
+                            <select id="sort-today-select" aria-label="Sort Habits">
+                                <option value="time">Sort by: Time</option>
+                                <option value="priority">Sort by: Priority</option>
+                                <option value="alphabetical">Sort by: Alphabetical</option>
+                                <option value="completion">Sort by: Completion</option>
+                                <option value="newest">Sort by: Newest</option>
+                                <option value="oldest">Sort by: Oldest</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Habits List Container -->
+                <div class="today-habits-list" id="today-habits-container">
+                    <!-- Dynamic Checklist items loaded here -->
+                </div>
+
+                <!-- Empty State Illustration -->
+                <div class="empty-state" id="today-empty-state" style="display: none;">
+                    <div class="empty-illustration">
+                        <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="100" cy="100" r="70" stroke-dasharray="4 4"/>
+                            <path d="M75 100l17 17 33-34" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+                            <path d="M60 70c0 0 20-20 40-20s40 20 40 20" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h4>No habits registered for today!</h4>
+                    <p>Start your progress by adding your very first custom habit.</p>
+                    <button class="btn btn-accent btn-sm" id="btn-empty-add">Create Habit</button>
+                </div>
+            </section>
+
+            <!-- Page 2: Habits Manager -->
+            <section class="page" id="page-habits">
+                <div class="habits-filter-bar">
+                    <!-- Search Input -->
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="habit-search-input" placeholder="Search habits..." aria-label="Search habits">
+                    </div>
+                    <!-- Filters Grid -->
+                    <div class="filters-grid">
+                        <div class="select-wrapper">
+                            <select id="filter-category" aria-label="Filter by Category">
+                                <option value="all">All Categories</option>
+                                <option value="Health">Health</option>
+                                <option value="Fitness">Fitness</option>
+                                <option value="Mind">Mind</option>
+                                <option value="Work">Work</option>
+                                <option value="Routine">Routine</option>
+                                <option value="Custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="select-wrapper">
+                            <select id="filter-priority" aria-label="Filter by Priority">
+                                <option value="all">All Priorities</option>
+                                <option value="High">High</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="select-wrapper">
+                            <select id="sort-manager-select" aria-label="Sort Habits">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="alphabetical">Alphabetical</option>
+                                <option value="priority">Priority</option>
+                                <option value="time">Time</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="habits-grid" id="habits-manager-container">
+                    <!-- Cards will be dynamically injected here -->
+                </div>
+
+                <!-- Empty Manager State -->
+                <div class="empty-state" id="manager-empty-state" style="display: none;">
+                    <div class="empty-illustration">
+                        <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M50 150h100M60 120h80M70 90h60M80 60h40" stroke-linecap="round"/>
+                            <circle cx="100" cy="105" r="45" stroke-dasharray="3 3"/>
+                        </svg>
+                    </div>
+                    <h4>No habits match your filters!</h4>
+                    <p>Adjust your search criteria or create a new habit template.</p>
+                </div>
+            </section>
+
+            <!-- Page 3: Calendar -->
+            <section class="page" id="page-calendar">
+                <div class="calendar-controls-bar">
+                    <button class="btn btn-secondary btn-icon-only" id="calendar-prev-month" aria-label="Previous Month">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+                    <h2 class="calendar-month-year" id="calendar-month-year-label">July 2026</h2>
+                    <button class="btn btn-secondary btn-icon-only" id="calendar-next-month" aria-label="Next Month">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="calendar-legend">
+                    <div class="legend-item"><span class="legend-dot legend-green"></span> 100% Completed</div>
+                    <div class="legend-item"><span class="legend-dot legend-yellow"></span> Partially Completed</div>
+                    <div class="legend-item"><span class="legend-dot legend-red"></span> No Completion / Red</div>
+                    <div class="legend-item"><span class="legend-dot legend-gray"></span> Future / Empty Day</div>
+                </div>
+
+                <div class="calendar-card glass-card">
+                    <div class="calendar-weekdays">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div class="calendar-days" id="calendar-days-grid">
+                        <!-- Calendar day elements dynamically populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 4: Reports & Growth Analytics -->
+            <section class="page" id="page-reports">
+                <!-- Summary KPI Row -->
+                <div class="kpi-grid">
+                    <div class="kpi-card glass-card">
+                        <span class="kpi-title">Today's Growth</span>
+                        <div class="kpi-value-row">
+                            <span class="kpi-val" id="kpi-today-val">0%</span>
+                            <span class="trend-indicator" id="kpi-today-trend">↑ 0%</span>
+                        </div>
+                        <div class="mini-progress"><div class="mini-progress-bar" id="kpi-today-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <span class="kpi-title">Weekly Average</span>
+                        <div class="kpi-value-row">
+                            <span class="kpi-val" id="kpi-weekly-val">0%</span>
+                            <span class="trend-indicator" id="kpi-weekly-trend">↑ 0%</span>
+                        </div>
+                        <div class="mini-progress"><div class="mini-progress-bar" id="kpi-weekly-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <span class="kpi-title">Monthly Average</span>
+                        <div class="kpi-value-row">
+                            <span class="kpi-val" id="kpi-monthly-val">0%</span>
+                            <span class="trend-indicator" id="kpi-monthly-trend">↑ 0%</span>
+                        </div>
+                        <div class="mini-progress"><div class="mini-progress-bar" id="kpi-monthly-bar" style="width: 0%;"></div></div>
+                    </div>
+                    <div class="kpi-card glass-card">
+                        <span class="kpi-title">Overall Consistency</span>
+                        <div class="kpi-value-row">
+                            <span class="kpi-val" id="kpi-overall-val">0%</span>
+                            <span class="trend-indicator" id="kpi-overall-trend">Stable</span>
+                        </div>
+                        <div class="mini-progress"><div class="mini-progress-bar" id="kpi-overall-bar" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+
+                <!-- Stats Detail Overview -->
+                <div class="stats-overview-grid">
+                    <div class="kpi-stat-subcard glass-card">
+                        <h4>Total Tracked Days</h4>
+                        <p class="subcard-big-val" id="stats-total-days">0</p>
+                    </div>
+                    <div class="kpi-stat-subcard glass-card">
+                        <h4>Best Performing Day</h4>
+                        <p class="subcard-big-val" id="stats-best-day">N/A</p>
+                    </div>
+                    <div class="kpi-stat-subcard glass-card">
+                        <h4>Worst Performing Day</h4>
+                        <p class="subcard-big-val" id="stats-worst-day">N/A</p>
+                    </div>
+                    <div class="kpi-stat-subcard glass-card">
+                        <h4>Yearly Average</h4>
+                        <p class="subcard-big-val" id="stats-yearly-avg">0%</p>
+                    </div>
+                </div>
+
+                <!-- Main Analytics Visualization Panels -->
+                <div class="charts-layout-grid">
+                    <!-- Weekly Trend Line Chart -->
+                    <div class="chart-panel glass-card">
+                        <div class="chart-header">
+                            <h3>Weekly Completion Trend</h3>
+                            <span class="chart-desc">Completion % over past 7 active days</span>
+                        </div>
+                        <div class="chart-container" id="line-chart-container">
+                            <!-- Custom SVG Line Chart injected by script -->
+                        </div>
+                    </div>
+
+                    <!-- Monthly Average Bar Chart -->
+                    <div class="chart-panel glass-card">
+                        <div class="chart-header">
+                            <h3>Category Performance</h3>
+                            <span class="chart-desc">Completion rates classified by habit category</span>
+                        </div>
+                        <div class="chart-container" id="bar-chart-container">
+                            <!-- Custom SVG Bar Chart injected by script -->
+                        </div>
+                    </div>
+
+                    <!-- Category Breakdown Pie Chart -->
+                    <div class="chart-panel glass-card">
+                        <div class="chart-header">
+                            <h3>Priority Distribution</h3>
+                            <span class="chart-desc">Proportion of your habits grouped by priority</span>
+                        </div>
+                        <div class="chart-container flex-center" id="pie-chart-container">
+                            <!-- Custom SVG Pie Chart injected by script -->
+                        </div>
+                    </div>
+
+                    <!-- 365 Days Calendar Heatmap -->
+                    <div class="chart-panel glass-card span-cols-2">
+                        <div class="chart-header">
+                            <h3>Consistency Heatmap</h3>
+                            <span class="chart-desc">Daily check-in intensities for the current year</span>
+                        </div>
+                        <div class="heatmap-wrapper scrollable-heatmap" id="heatmap-container">
+                            <!-- Custom SVG Calendar Heatmap injected by script -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page 5: Settings -->
+            <section class="page" id="page-settings">
+                <div class="settings-stack">
+                    <!-- Theme & Accents -->
+                    <div class="settings-group glass-card">
+                        <h3>Visual Customization</h3>
+                        <p class="settings-desc">Fine-tune Aura's appearance to fit your setup.</p>
+                        
+                        <div class="settings-row">
+                            <div class="row-label">
+                                <strong>Theme Mode</strong>
+                                <span>Switch between Light and Dark interface modes.</span>
+                            </div>
+                            <div class="theme-toggle-wrapper">
+                                <button class="btn btn-secondary active" id="btn-theme-dark">Dark</button>
+                                <button class="btn btn-secondary" id="btn-theme-light">Light</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-row">
+                            <div class="row-label">
+                                <strong>Accent Color</strong>
+                                <span>Choose the active color styling theme.</span>
+                            </div>
+                            <div class="accent-selector" id="accent-colors-grid">
+                                <button class="accent-circle active" data-color="blue" style="background: #3b82f6;" aria-label="Blue Theme"></button>
+                                <button class="accent-circle" data-color="purple" style="background: #8b5cf6;" aria-label="Purple Theme"></button>
+                                <button class="accent-circle" data-color="emerald" style="background: #10b981;" aria-label="Emerald Theme"></button>
+                                <button class="accent-circle" data-color="rose" style="background: #f43f5e;" aria-label="Rose Theme"></button>
+                                <button class="accent-circle" data-color="amber" style="background: #f59e0b;" aria-label="Amber Theme"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backup & Restore -->
+                    <div class="settings-group glass-card">
+                        <h3>Backup & Portability</h3>
+                        <p class="settings-desc">Export or restore your tracking checkpoints.</p>
+                        
+                        <div class="settings-action-row">
+                            <div class="action-desc">
+                                <strong>Export Tracking Ledger</strong>
+                                <span>Export all configuration settings and historical tracking sheets as a single offline `.json` backup file.</span>
+                            </div>
+                            <button class="btn btn-secondary" id="btn-export-data">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                <span>Export (JSON)</span>
+                            </button>
+                        </div>
+
+                        <div class="settings-action-row border-top">
+                            <div class="action-desc">
+                                <strong>Import Tracking Ledger</strong>
+                                <span>Restore and overwrite existing checkpoints from a custom backups file.</span>
+                            </div>
+                            <div class="upload-btn-wrapper">
+                                <button class="btn btn-secondary" id="btn-trigger-import">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    <span>Import Ledger</span>
+                                </button>
+                                <input type="file" id="import-data-file" accept=".json" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset Panel -->
+                    <div class="settings-group glass-card border-danger-card">
+                        <h3 class="text-danger">Danger Zone</h3>
+                        <p class="settings-desc text-danger-soft">These operations will destroy records and cannot be undone.</p>
+                        
+                        <div class="settings-action-row">
+                            <div class="action-desc">
+                                <strong>Reset All Tracking Logs</strong>
+                                <span>Clear all configurations, custom habits template grids, and historic tracking checkins. Re-initiates default workspace.</span>
+                            </div>
+                            <button class="btn btn-danger" id="btn-reset-data">Reset System Data</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Floating Add Habit Button (Desktop/Mobile) -->
+    <button class="floating-add-btn" id="btn-floating-add" aria-label="Add Habit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+    </button>
+
+    <!-- Modal Form: Add / Edit Habit -->
+    <div class="modal-overlay" id="modal-habit-form">
+        <div class="modal-container glass-card scale-in-modal">
+            <div class="modal-header">
+                <h3 id="habit-modal-title">Create New Habit</h3>
+                <button class="btn-close-modal" id="btn-close-habit-modal" aria-label="Close Modal">&times;</button>
+            </div>
+            <form class="modal-body" id="habit-form" autocomplete="off">
+                <input type="hidden" id="edit-habit-id">
+                
+                <div class="form-group">
+                    <label for="habit-name">Habit Name</label>
+                    <input type="text" id="habit-name" placeholder="E.g., Morning Meditation" required>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="habit-time">Scheduled Time</label>
+                        <input type="time" id="habit-time" value="08:00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="habit-category">Category</label>
+                        <select id="habit-category" required>
+                            <option value="Health">Health</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Mind">Mind</option>
+                            <option value="Work">Work</option>
+                            <option value="Routine">Routine</option>
+                            <option value="Custom">Custom</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="habit-priority">Priority</label>
+                        <select id="habit-priority" required>
+                            <option value="High">High</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Accent Color Picker</label>
+                        <div class="form-colors-grid" id="form-colors-grid">
+                            <span class="color-dot active" data-color="#3b82f6" style="background: #3b82f6;"></span>
+                            <span class="color-dot" data-color="#8b5cf6" style="background: #8b5cf6;"></span>
+                            <span class="color-dot" data-color="#10b981" style="background: #10b981;"></span>
+                            <span class="color-dot" data-color="#f43f5e" style="background: #f43f5e;"></span>
+                            <span class="color-dot" data-color="#f59e0b" style="background: #f59e0b;"></span>
+                            <span class="color-dot" data-color="#06b6d4" style="background: #06b6d4;"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Icon</label>
+                    <div class="form-icons-grid" id="form-icons-grid">
+                        <button type="button" class="icon-selector-btn active" data-icon="heart" aria-label="Heart Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        </button>
+                        <button type="button" class="icon-selector-btn" data-icon="dumbbell" aria-label="Fitness Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5h11M6.5 17.5h11M12 2v20M3 10h18M3 14h18"/></svg>
+                        </button>
+                        <button type="button" class="icon-selector-btn" data-icon="brain" aria-label="Mind Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1 0-3.12 3 3 0 0 1 0-3.88 2.5 2.5 0 0 1 0-3.12A2.5 2.5 0 0 1 9.5 2zM14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 0-3.12 3 3 0 0 0 0-3.88 2.5 2.5 0 0 0 0-3.12A2.5 2.5 0 0 0 14.5 2z"/></svg>
+                        </button>
+                        <button type="button" class="icon-selector-btn" data-icon="briefcase" aria-label="Work Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </button>
+                        <button type="button" class="icon-selector-btn" data-icon="book" aria-label="Learning Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15z"/></svg>
+                        </button>
+                        <button type="button" class="icon-selector-btn" data-icon="coffee" aria-label="Coffee Icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-habit">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-habit">Save Habit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Form: Yesterday/Today Check-in Prompt -->
+    <div class="modal-overlay" id="modal-startup-prompt">
+        <div class="modal-container glass-card scale-in-modal max-width-sm">
+            <div class="modal-header">
+                <h3>Log Checkpoint</h3>
+            </div>
+            <div class="modal-body">
+                <div class="startup-prompt-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-warning animate-bounce">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                </div>
+                <h4 class="text-center font-outfit" style="margin: 12px 0 6px 0;">Checkpoint Missing</h4>
+                <p class="text-center text-muted" id="startup-prompt-message">You haven't completed yesterday's habits.</p>
+            </div>
+            <div class="modal-footer flex-center-between">
+                <button class="btn btn-secondary btn-sm" id="btn-startup-skip">Skip Entry</button>
+                <button class="btn btn-primary btn-sm" id="btn-startup-action">Log Yesterday First</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Form: Date Details (Retroactive Tracker) -->
+    <div class="modal-overlay" id="modal-date-details">
+        <div class="modal-container glass-card scale-in-modal">
+            <div class="modal-header">
+                <h3 id="date-details-title">Habits for Date</h3>
+                <button class="btn-close-modal" id="btn-close-date-details" aria-label="Close Modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="date-details-stat-row">
+                    <div class="date-details-percentage" id="date-details-percentage-txt">0% Completed</div>
+                    <div class="mini-progress" style="height: 6px;"><div class="mini-progress-bar" id="date-details-progress-bar" style="width: 0%;"></div></div>
+                </div>
+                <div class="date-habits-checklist-wrapper" id="date-habits-list-container">
+                    <!-- Habits checklist elements generated by script -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-close-date-details-footer">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog Modal -->
+    <div class="modal-overlay" id="modal-confirm">
+        <div class="modal-container glass-card scale-in-modal max-width-sm">
+            <div class="modal-header">
+                <h3 id="confirm-title">Are you sure?</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-desc">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer flex-center-end">
+                <button class="btn btn-secondary btn-sm" id="btn-confirm-cancel" style="margin-right: 8px;">Cancel</button>
+                <button class="btn btn-danger btn-sm" id="btn-confirm-ok">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Keyboard Shortcuts Help Modal -->
+    <div class="modal-overlay" id="modal-shortcuts">
+        <div class="modal-container glass-card scale-in-modal max-width-sm">
+            <div class="modal-header">
+                <h3>Keyboard Shortcuts</h3>
+                <button class="btn-close-modal" id="btn-close-shortcuts-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <ul class="shortcuts-list">
+                    <li><kbd>D</kbd> <span>Go to Dashboard</span></li>
+                    <li><kbd>H</kbd> <span>Go to Habits Manager</span></li>
+                    <li><kbd>C</kbd> <span>Go to Calendar</span></li>
+                    <li><kbd>R</kbd> <span>Go to Reports</span></li>
+                    <li><kbd>S</kbd> <span>Go to Settings</span></li>
+                    <li><kbd>N</kbd> <span>Add New Habit</span></li>
+                    <li><kbd>?</kbd> <span>Toggle Shortcuts Help</span></li>
+                    <li><kbd>Esc</kbd> <span>Close active modal</span></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-close-shortcuts-footer">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Shortcuts Help Toggle -->
+    <button class="shortcuts-help-btn" id="btn-help-trigger" title="Keyboard Shortcuts (?)" aria-label="Keyboard Shortcuts Help">?</button>
+
+    <!-- Toast Notifications Grid -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
